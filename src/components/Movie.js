@@ -1,7 +1,12 @@
+import { useSelector } from "react-redux";
 import { movies } from "./../movies";
 
+
 export default function Movie(props) {
+  const movies = useSelector((store) => store.movies)
   const movie = movies[props.sira];
+
+  
 
   return (
     <div className="flex bg-white shadow-lg items-start">
@@ -21,8 +26,8 @@ export default function Movie(props) {
           <span className="flex-1">{movie.actors}</span>
         </div>
         <div className="flex text-sm gap-1 justify-end">
-          <span className="block px-2 py-1 rounded-md border border-zinc-400">{movie.year}</span>
-          <span className="block px-2 py-1 rounded-md border border-zinc-400">{movie.runtime}dk</span>
+          <span className="block px-2 py-1 rounded-md border border-zinc-400 bg-blue-500 shadow-2xl mx-1">{movie.year}</span>
+          <span className="block px-2 py-1 rounded-md border border-zinc-400 bg-blue-500 shadow-2xl">{movie.runtime}dk</span>
         </div>
       </div>
     </div>

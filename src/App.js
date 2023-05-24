@@ -2,13 +2,30 @@ import { useState } from "react";
 import { Switch, Route, NavLink } from "react-router-dom";
 import Movie from "./components/Movie";
 import FavMovie from "./components/FavMovie";
+import { useDispatch, useSelector } from "react-redux";
+import { basaDon, listeyeEkle, oncekiFilm, sonrakiFilm } from "./actions/listActions";
+
 
 function App() {
-  const [sira, setSira] = useState(0);
-  const favMovies = [];
+  const sira = useSelector((store) => store.sira);
+  const favMovies = useSelector((store) => store.favMovies)
+  const movies = useSelector((store) => store.movies);
+  const dispatch = useDispatch();
+  
 
-  function sonrakiFilm() {
-    setSira(sira + 1);
+  function oncekiFilmHandler() {
+    dispatch(oncekiFilm())
+  }
+
+  function sonrakiFilmHandler() {
+    dispatch(sonrakiFilm());
+  }
+
+  function listeyeEkleHandler() {
+    dispatch(listeyeEkle());
+  }
+  function basaDonHandler() {
+    dispatch(basaDon())
   }
 
   return (
@@ -23,19 +40,46 @@ function App() {
       </nav>
       <Switch>
         <Route exact path="/">
+        {movies.length > 0 ? (
+            <> 
           <Movie sira={sira} />
-
+          
           <div className="flex gap-3 justify-end py-3">
+          {sira > 0 && (
+                  <button
+                    onClick={basaDonHandler}
+                    className="select-none px-4 py-2 border border-blue-700 text-blue-700 hover:border-blue-800 hover:text-blue-900 opacity-100 rounded"
+                  >
+                    Başa dön
+                  </button>
+          )}
+
+          {sira > 0 && (
+                  <button
+                    onClick={oncekiFilmHandler}
+                    className="select-none px-4 py-2 border border-blue-700 text-blue-700 hover:border-blue-500 hover:text-blue-500 "
+                  >
+                    Önceki
+                  </button>
+                )}
+
             <button
-              onClick={sonrakiFilm}
+             disabled={sira === movies.length - 1}
+              onClick={sonrakiFilmHandler}
               className="select-none px-4 py-2 border border-blue-700 text-blue-700 hover:border-blue-500 hover:text-blue-500"
             >
               Sıradaki
             </button>
-            <button className="select-none px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white">
+            <button   onClick={listeyeEkleHandler} className="select-none px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white ">
               Listeme ekle
             </button>
           </div>
+          </>
+          ) : (
+            <div className="text-center">
+              Bütün filmleri listene eklediin :)
+            </div>
+          )}
         </Route>
 
         <Route path="/listem">
